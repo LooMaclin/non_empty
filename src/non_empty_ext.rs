@@ -1,21 +1,19 @@
-pub trait NonEmptyExt {
-    type Item;
+pub trait NonEmptyExt<T> {
     fn is_empty(&self) -> bool;
-    fn first(&self) -> &Self::Item;
-    fn last(&self) -> &Self::Item;
+    fn first(&self) -> &T;
+    fn last(&self) -> &T;
 }
 
-impl<T> NonEmptyExt for Vec<T> {
-    type Item = T;
+impl<T> NonEmptyExt<T> for Vec<T> {
     fn is_empty(&self) -> bool {
         self.is_empty()
     }
 
-    fn first(&self) -> &Self::Item {
+    fn first(&self) -> &T {
         &self[0]
     }
 
-    fn last(&self) -> &Self::Item {
+    fn last(&self) -> &T {
         &self.as_slice().last().expect("ha-ha, impossible")
     }
 }

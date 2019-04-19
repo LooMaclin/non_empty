@@ -3,27 +3,27 @@ use std::fmt::Debug;
 use std::marker::PhantomData;
 use crate::non_empty_ext;
 
-pub struct NonEmpty<T>(T) where T: NonEmptyExt;
+pub struct NonEmpty<T, V> where T: NonEmptyExt<V> { inner: T, marker: PhantomData<V> }
 
-impl<T> NonEmpty<T> where T: NonEmptyExt {
+impl<T, V> NonEmpty<T, V> where T: NonEmptyExt<V> {
 
     pub fn new(t: T) -> Result<Self, &'static str> {
         if !t.is_empty() {
-            Ok(Self(t))
+            Ok(Self { inner: t, marker: PhantomData, })
         } else {
             Err("empty collection")
         }
     }
 
     pub fn take(self) -> T {
-        self.0
+        self.inner
     }
 
-    pub fn first(&self) -> &<T as non_empty_ext::NonEmptyExt>::Item {
-        self.0.first()
+    pub fn first(&self) -> &V {
+        self.inner.first()
     }
 
-    pub fn last(&self) -> &<T as non_empty_ext::NonEmptyExt>::Item {
-        self.0.last()
+    pub fn last(&self) -> &V {
+        self.inner.last()
     }
 }
